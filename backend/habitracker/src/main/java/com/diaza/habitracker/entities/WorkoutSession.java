@@ -1,6 +1,6 @@
 package com.diaza.habitracker.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.diaza.habitracker.entities.enums.SessionType;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,26 +15,23 @@ public class WorkoutSession {
     private User user;
 
     @ManyToOne
-    private Workout workout;
+    private Workout workout; // null for CARDIO/run sessions
 
     private Integer progress;
-
     private boolean completed;
+    private Integer caloriesBurned;
+
+    // Run-specific fields
+    private Double distanceKm;
+    private Integer durationSeconds;
+
+    @Enumerated(EnumType.STRING)
+    private SessionType sessionType; // STRENGTH or CARDIO
 
     private LocalDateTime startedAt;
     private LocalDateTime completedAt;
 
     public WorkoutSession() {}
-
-    public WorkoutSession(Long id, User user, Workout workout, Integer progress, boolean completed, LocalDateTime startedAt, LocalDateTime completedAt) {
-        this.id = id;
-        this.user = user;
-        this.workout = workout;
-        this.progress = progress;
-        this.completed = completed;
-        this.startedAt = startedAt;
-        this.completedAt = completedAt;
-    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -50,6 +47,18 @@ public class WorkoutSession {
 
     public boolean isCompleted() { return completed; }
     public void setCompleted(boolean completed) { this.completed = completed; }
+
+    public Integer getCaloriesBurned() { return caloriesBurned; }
+    public void setCaloriesBurned(Integer caloriesBurned) { this.caloriesBurned = caloriesBurned; }
+
+    public Double getDistanceKm() { return distanceKm; }
+    public void setDistanceKm(Double distanceKm) { this.distanceKm = distanceKm; }
+
+    public Integer getDurationSeconds() { return durationSeconds; }
+    public void setDurationSeconds(Integer durationSeconds) { this.durationSeconds = durationSeconds; }
+
+    public SessionType getSessionType() { return sessionType; }
+    public void setSessionType(SessionType sessionType) { this.sessionType = sessionType; }
 
     public LocalDateTime getStartedAt() { return startedAt; }
     public void setStartedAt(LocalDateTime startedAt) { this.startedAt = startedAt; }

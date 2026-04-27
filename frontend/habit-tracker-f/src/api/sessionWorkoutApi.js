@@ -1,37 +1,49 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_CONTROLLER +"/sessions"
+  baseURL: import.meta.env.VITE_API_URL_CONTROLLER + "/sessions"
 });
 
-export const getUserSession = async (id) => {
-  const res = await API.get(`/active/${id}`);
+// Auto-attach token from localStorage
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export const getUserSession = async (userId) => {
+  const res = await API.get(`/active/${userId}`);
   return res.data;
 };
 
-
-export const startWorkout = async (userId,workoutId, token) => {
-  const res = await fetch(API+`/start/${userId}/${workoutId}`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
-
-  return res.json();
+export const startWorkout = async (userId, workoutId) => {
+  const res = await API.post(`/start/${userId}/${workoutId}`);
+  return res.data;
 };
 
-export const updateProgress = async (sessionId,progress, token) => {
-  const res = await fetch(API+`/sessions/${sessionId}/progress?progress=${progress}`, {
-    method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
+export const startRun = async (userId) => {
+  const res = await API.post(`/start/run/${userId}`);
+  return res.data;
+};
 
-  return res.json();
+export const finishRun = async (sessionId, distanceKm, durationSeconds) => {
+  const res = await API.put(
+    `/${sessionId}/finish-run?distanceKm=${distanceKm}&durationSeconds=${durationSeconds}`
+  );
+  return res.data;
+};
+
+export const updateProgress = async (sessionId, progress) => {
+  const res = await API.put(`/${sessionId}/progress?progress=${progress}`);
+  return res.data;
+};
+
+export const completeWorkout = async (sessionId) => {
+  const res = await API.put(`/${sessionId}/complete`);
+  return res.data;
+};
+
+export const getWeeklyCalories = async (userId) => {
+  const res = await API.get(`/calories/week/${userId}`);
+  return res.data;
 };

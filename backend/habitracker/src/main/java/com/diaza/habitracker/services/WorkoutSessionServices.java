@@ -26,17 +26,22 @@ public class WorkoutSessionServices {
     }
 
     @Transactional
-    public WorkoutSession save(WorkoutSession workouts) {
-        return workoutSesDao.save(workouts);
+    public WorkoutSession save(WorkoutSession session) {
+        return workoutSesDao.save(session);
     }
-
-    public void delete(WorkoutSession workouts) {
-        workoutSesDao.delete(workouts);
-    }
-
 
     @Transactional
-    public Optional<WorkoutSession> findByUserIdAndCompletedFalse(Long id) {
-        return (Optional<WorkoutSession>) workoutSesDao.findByUserIdAndCompletedFalse(id);
+    public void delete(WorkoutSession session) {
+        workoutSesDao.delete(session);
+    }
+
+    @Transactional
+    public Optional<WorkoutSession> findByUserIdAndCompletedFalse(Long userId) {
+        return workoutSesDao.findByUserIdAndCompletedFalse(userId);
+    }
+
+    @Transactional
+    public List<WorkoutSession> findAllByUserId(Long userId) {
+        return workoutSesDao.findAllByUserId(userId);
     }
 }

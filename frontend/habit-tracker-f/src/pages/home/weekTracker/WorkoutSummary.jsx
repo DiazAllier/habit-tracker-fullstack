@@ -1,5 +1,9 @@
+import { useEffect } from "react";
 
-export default function WorkoutSummary({ data, formatDuration }) {
+export default function WorkoutSummary({ data, formatDuration, calories }) {
+
+   
+
 
     return (
         <div className="flex flex-col sm:flex-row gap-4">
@@ -17,7 +21,7 @@ export default function WorkoutSummary({ data, formatDuration }) {
 
             <div className="p-5 lg:w-50  rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 text-white shadow-[0_10px_30px_rgba(249,115,22,0.4)] hover:brightness-110">
                 <h2 className="text-xl opacity-80">Calories</h2>
-                <p className="text-l opacity-80"> <span className="text-3xl font-bold mt-1">1,200 </span>kcal</p>
+                <p className="text-l opacity-80"> <span className="text-3xl font-bold mt-1">{calories} </span>kcal</p>
             </div>
 
         </div>

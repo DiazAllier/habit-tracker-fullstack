@@ -42,6 +42,9 @@ public class DataSeeder {
             Exercise plank = exerciseRepo.save(
                     new Exercise(null, "Plank", ExerciseCategory.CORE));
 
+            Exercise longRun = exerciseRepo.save(
+                    new Exercise(null, "Long Run", ExerciseCategory.CARDIO));
+
             Workout workout = new Workout();
             workout.setName("Upper Body Strength");
 
@@ -57,10 +60,14 @@ public class DataSeeder {
             workoutExerciseRepo.save(
                     new WorkoutExercise(null, workout, plank, 3, "2", 30));
 
+            workoutExerciseRepo.save(
+                    new WorkoutExercise(null, workout, longRun, 1, "1", 90));
+
             WorkoutSession session = new WorkoutSession();
             session.setUser(user);
             session.setWorkout(workout);
             session.setProgress(20);
+            session.setCaloriesBurned(302);
             session.setCompleted(false);
             session.setStartedAt(LocalDateTime.now());
 

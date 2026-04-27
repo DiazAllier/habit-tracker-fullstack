@@ -1,17 +1,18 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_AUTH+"/exercises"
+  baseURL: import.meta.env.VITE_API_URL_CONTROLLER+"/exercises"
 });
 
-export const getExercises = async (token) => {
-  const res = await fetch(API, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-  return res.json();
+export const getExercises = async () => {
+  const res = await API.get();
+  return res.data;
 };
 
 export const addWorkout = async (data, token) => {
