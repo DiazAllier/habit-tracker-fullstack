@@ -4,7 +4,6 @@ const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL_CONTROLLER + "/sessions"
 });
 
-// Auto-attach token from localStorage
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -16,8 +15,8 @@ export const getUserSession = async (userId) => {
   return res.data;
 };
 
-export const startWorkout = async (userId, workoutId) => {
-  const res = await API.post(`/start/${userId}/${workoutId}`);
+export const startWorkout = async (userId, workoutId, sessionType = "STRENGTH") => {
+  const res = await API.post(`/start/${userId}/${workoutId}?sessionType=${sessionType}`);
   return res.data;
 };
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/controller")
+@RequestMapping("/api/controller/workout")
 @CrossOrigin(origins = "http://localhost:5173")
 public class WorkoutController {
 
@@ -23,12 +23,12 @@ public class WorkoutController {
     @Autowired
     private WorkoutExerciseServices workoutExerciseServices;
 
-    @GetMapping("/workout")
+    @GetMapping()
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(services.findAll());
     }
 
-    @GetMapping("/workout/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         Workout workout = services.findById(id).orElse(null);
         if (workout != null) {
@@ -38,12 +38,12 @@ public class WorkoutController {
                 .body(new MessageResponse("Workout not found"));
     }
 
-    @PostMapping("/workout")
+    @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Workout workout) {
         return ResponseEntity.ok(services.save(workout));
     }
 
-    @DeleteMapping("/workout/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Workout workout = services.findById(id).orElse(null);
         if (workout != null) {
@@ -54,7 +54,7 @@ public class WorkoutController {
                 .body(new MessageResponse("Workout not found"));
     }
 
-    @PostMapping("/workout/{workoutId}/exercises")
+    @PostMapping("/{workoutId}/exercises")
     public ResponseEntity<?> addExerciseToWorkout(
             @PathVariable Long workoutId,
             @RequestBody WorkoutExercise workoutExercise
@@ -69,7 +69,7 @@ public class WorkoutController {
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/workout/{workoutId}/exercises")
+    @GetMapping("/{workoutId}/exercises")
     public ResponseEntity<?> getExercisesInWorkout(@PathVariable Long workoutId) {
         Workout workout = services.findById(workoutId).orElse(null);
         if (workout == null) {

@@ -43,17 +43,16 @@ public class WorkoutSessionController {
         return ResponseEntity.ok(session);
     }
 
-    // GET all sessions for a user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<WorkoutSession>> getUserSessions(@PathVariable Long userId) {
         return ResponseEntity.ok(workoutServServices.findAllByUserId(userId));
     }
 
-    // POST start a strength workout session
     @PostMapping("/start/{userId}/{workoutId}")
     public ResponseEntity<?> startWorkout(
             @PathVariable Long userId,
-            @PathVariable Long workoutId
+            @PathVariable Long workoutId,
+            @RequestParam(defaultValue = "STRENGTH") SessionType sessionType
     ) {
         if (workoutServServices.findByUserIdAndCompletedFalse(userId).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -71,13 +70,12 @@ public class WorkoutSessionController {
         session.setProgress(0);
         session.setCompleted(false);
         session.setCaloriesBurned(0);
-        session.setSessionType(SessionType.STRENGTH);
+        session.setSessionType(sessionType);
         session.setStartedAt(LocalDateTime.now());
 
         return ResponseEntity.ok(workoutServServices.save(session));
     }
 
-    // POST start a cardio/run session (no workoutId needed)
     @PostMapping("/start/run/{userId}")
     public ResponseEntity<?> startRun(@PathVariable Long userId) {
         if (workoutServServices.findByUserIdAndCompletedFalse(userId).isPresent()) {
@@ -102,7 +100,6 @@ public class WorkoutSessionController {
         return ResponseEntity.ok(workoutServServices.save(session));
     }
 
-    // PUT finish a run - saves distance, duration, calculates calories
     @PutMapping("/{sessionId}/finish-run")
     public ResponseEntity<?> finishRun(
             @PathVariable Long sessionId,
@@ -125,7 +122,6 @@ public class WorkoutSessionController {
         return ResponseEntity.ok(workoutServServices.save(session));
     }
 
-    // PUT update strength workout progress
     @PutMapping("/{sessionId}/progress")
     public ResponseEntity<?> updateProgress(
             @PathVariable Long sessionId,
@@ -145,7 +141,6 @@ public class WorkoutSessionController {
         return ResponseEntity.ok(workoutServServices.save(session));
     }
 
-    // PUT complete a strength workout
     @PutMapping("/{sessionId}/complete")
     public ResponseEntity<?> completeWorkout(@PathVariable Long sessionId) {
         WorkoutSession session = workoutServServices.findById(sessionId)
@@ -159,7 +154,6 @@ public class WorkoutSessionController {
         return ResponseEntity.ok(workoutServServices.save(session));
     }
 
-    // GET total calories burned this week
     @GetMapping("/calories/week/{userId}")
     public ResponseEntity<?> getWeeklyCalories(@PathVariable Long userId) {
         List<WorkoutSession> sessions = workoutServServices.findAllByUserId(userId);

@@ -55,7 +55,6 @@ const SRAButton = ({ userId, workoutId, session, onSessionUpdate, onLongRun, onA
     )}
 
 
-      {/* Long Run → opens LongRunScreen */}
       <button
         onClick={onLongRun}
         className="flex flex-col sm:flex-row items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-b from-[#242528] to-[#13120d] px-6 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:brightness-110 active:scale-95"

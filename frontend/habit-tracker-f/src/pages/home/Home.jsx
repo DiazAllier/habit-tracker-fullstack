@@ -8,6 +8,7 @@ import LongRunScreen from "./LongRunScreen.jsx";
 import { getUserSession, getWeeklyCalories } from "../../api/sessionWorkoutApi.js";
 import axios from "axios";
 import { getExercises } from "../../api/exerciseApi.js";
+import { getWorkouts } from "../../api/workoutApi.js";
 
 const Home = () => {
 
@@ -28,7 +29,8 @@ const Home = () => {
 
   const fetchAll = async () => {
     try {
-      const exercisesData = await getExercises();
+      // const exercisesData = await getExercises();
+      const exercisesData = await getWorkouts();
       setExercises(exercisesData);
     } catch (error) {
       console.error("Failed to fetch exercises:", error);
@@ -39,6 +41,7 @@ const Home = () => {
       const data = await getUserSession(userId);
       setSession(data);
       computeDuration(data);
+      console.log(data)
     } catch {
       setSession(null);
     }

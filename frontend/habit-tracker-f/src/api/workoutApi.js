@@ -1,28 +1,48 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_AUTH
+  baseURL: import.meta.env.VITE_API_URL_CONTROLLER + "/workout"
 });
 
-export const getWorkouts = async (token) => {
-  const res = await fetch(API, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-  return res.json();
+export const getWorkouts = async () => {
+  const res = await API.get();
+  return res.data;
 };
 
-export const addWorkout = async (data, token) => {
-  const res = await fetch(API, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
+export const startWorkout = async (userId, workoutId, sessionType = "STRENGTH") => {
+  const res = await API.post(`/start/${userId}/${workoutId}?sessionType=${sessionType}`);
+  return res.data;
+};
 
-  return res.json();
+export const startRun = async (userId) => {
+  const res = await API.post(`/start/run/${userId}`);
+  return res.data;
+};
+
+export const finishRun = async (sessionId, distanceKm, durationSeconds) => {
+  const res = await API.put(
+    `/${sessionId}/finish-run?distanceKm=${distanceKm}&durationSeconds=${durationSeconds}`
+  );
+  return res.data;
+};
+
+export const updateProgress = async (sessionId, progress) => {
+  const res = await API.put(`/${sessionId}/progress?progress=${progress}`);
+  return res.data;
+};
+
+export const completeWorkout = async (sessionId) => {
+  const res = await API.put(`/${sessionId}/complete`);
+  return res.data;
+};
+
+export const getWeeklyCalories = async (userId) => {
+  const res = await API.get(`/calories/week/${userId}`);
+  return res.data;
 };

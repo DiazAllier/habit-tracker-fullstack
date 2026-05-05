@@ -20,6 +20,8 @@ const RecentActivity = ({ data }) => {
                             <div className="px-3 text-start ">
                                 <p className="text-sm/6 font-semibold text-white">{data.exercise.name}</p>
                                 <p className="mt-1 truncate text-xs/5 text-gray-400">{data.duration}</p>
+                                <p className="mt-1 truncate text-xs/5 text-gray-400">{data.sets} sets</p>
+                                <p className="mt-1 truncate text-xs/5 text-gray-400">{data.reps} reps</p>
                             </div>
                         </div>
                     ))}
