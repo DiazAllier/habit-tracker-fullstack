@@ -1,7 +1,6 @@
 export default function WeekCalendarProgress({ allSessions }) {
     const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-    // Get start of current week (Monday)
     const now = new Date();
     const dayOfWeek = now.getDay(); // 0 = Sun
     const diffToMonday = (dayOfWeek + 6) % 7;
@@ -9,7 +8,6 @@ export default function WeekCalendarProgress({ allSessions }) {
     monday.setDate(now.getDate() - diffToMonday);
     monday.setHours(0, 0, 0, 0);
 
-    // Build a set of day indexes (0=Mon..6=Sun) that have completed sessions
     const completedDays = new Set();
     const runDays = new Set();
 
@@ -23,13 +21,13 @@ export default function WeekCalendarProgress({ allSessions }) {
         }
     });
 
-    const todayIndex = diffToMonday; // 0=Mon today if Monday
+    const todayIndex = diffToMonday; 
 
     const getStatus = (index) => {
         if (completedDays.has(index)) return "done";
         if (index === todayIndex) return "current";
-        if (index < todayIndex) return "pending"; // past day, no session
-        return "empty"; // future
+        if (index < todayIndex) return "pending"; 
+        return "empty";
     };
 
     const getStyles = (status) => {

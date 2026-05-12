@@ -30,7 +30,6 @@ public class WorkoutSessionController {
     @Autowired
     private WorkoutSessionServices workoutServServices;
 
-    // GET active session for a user
     @GetMapping("/active/{userId}")
     public ResponseEntity<?> getActiveSession(@PathVariable Long userId) {
         WorkoutSession session = workoutServServices
@@ -115,7 +114,6 @@ public class WorkoutSessionController {
         session.setCompleted(true);
         session.setCompletedAt(LocalDateTime.now());
 
-        // ~60 calories per km
         int calories = (int) Math.round(distanceKm * 60);
         session.setCaloriesBurned(calories);
 
@@ -165,9 +163,9 @@ public class WorkoutSessionController {
     }
 
     private int calculateStrengthCalories(WorkoutSession session) {
-        if (session.getWorkout() == null || session.getWorkout().getExercises() == null) return 0;
-        return session.getWorkout().getExercises().stream()
-                .mapToInt(we -> (we.getSets() != null ? we.getSets() : 1) * 50)
-                .sum();
+        if (session.getStartedAt() == null) return 0;
+        long minutes = java.time.Duration.between(session.getStartedAt(), LocalDateTime.now()).toMinutes();
+        return (int) (minutes * 6);
+
     }
 }

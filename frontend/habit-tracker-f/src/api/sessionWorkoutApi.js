@@ -11,6 +11,11 @@ API.interceptors.request.use((config) => {
 });
 
 export const getUserSession = async (userId) => {
+  const res = await API.get(`/user/${userId}`);
+  return res.data;
+};
+
+export const getUserActiveSession = async (userId) => {
   const res = await API.get(`/active/${userId}`);
   return res.data;
 };

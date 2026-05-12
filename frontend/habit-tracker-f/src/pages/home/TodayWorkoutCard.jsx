@@ -1,7 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { updateProgress } from "../../api/sessionWorkoutApi";
 import DropDown from "../../reusables/DropDown";
-const TodayWorkoutCard = ({ data, onSessionUpdate,exercises }) => {
+import LiveTimer from "../../reusables/LiveTimer";
+const TodayWorkoutCard = ({ data, onSessionUpdate, exercises, onWorkoutSelect }) => {
+
+
+  useEffect(() => {
+  }, []);
+
+
 
   const handleContinue = async () => {
     if (!data?.id) return;
@@ -33,6 +40,13 @@ const TodayWorkoutCard = ({ data, onSessionUpdate,exercises }) => {
             <div className="flex items-center justify-between mb-1">
               <span className="text-sm text-gray-400 font-medium">{data?.workout?.name}</span>
             </div>
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              <span className="whitespace-nowrap text-sm font-medium text-gray-300">
+                <span className="text-white">{<LiveTimer session={data} />}</span>
+              </span>
+            </div>
+
+
 
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <span className="whitespace-nowrap text-sm font-medium text-gray-300">
@@ -63,7 +77,7 @@ const TodayWorkoutCard = ({ data, onSessionUpdate,exercises }) => {
         ) : (
           <div className="flex flex-col items-center gap-4 py-2">
             <p className="text-gray-400">No active workout. Start one below!</p>
-            <DropDown items={exercises}/>
+            <DropDown items={exercises} onSelect={(item) => onWorkoutSelect(item.id)} />
           </div>
         )}
       </article>

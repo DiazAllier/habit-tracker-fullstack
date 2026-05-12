@@ -5,7 +5,7 @@ import SRAButton from "./SRAButton.jsx";
 import TodayWorkoutCard from "./TodayWorkoutCard.jsx";
 import WeekTracker from "./weekTracker/WeekTracker.jsx";
 import LongRunScreen from "./LongRunScreen.jsx";
-import { getUserSession, getWeeklyCalories } from "../../api/sessionWorkoutApi.js";
+import { getUserActiveSession, getUserSession, getWeeklyCalories } from "../../api/sessionWorkoutApi.js";
 import axios from "axios";
 import { getExercises } from "../../api/exerciseApi.js";
 import { getWorkouts } from "../../api/workoutApi.js";
@@ -22,6 +22,7 @@ const Home = () => {
 
   const userId = 1;
   const workoutId = session?.workout?.id ?? 1;
+  const [selectedWorkoutId, setSelectedWorkoutId] = useState(null);
 
   useEffect(() => {
     fetchAll();
@@ -29,7 +30,6 @@ const Home = () => {
 
   const fetchAll = async () => {
     try {
-      // const exercisesData = await getExercises();
       const exercisesData = await getWorkouts();
       setExercises(exercisesData);
     } catch (error) {
@@ -38,45 +38,43 @@ const Home = () => {
     }
 
     try {
-      const data = await getUserSession(userId);
+      const data = await getUserActiveSession(userId);
       setSession(data);
-      computeDuration(data);
-      console.log(data)
-    } catch {
-      setSession(null);
+    } catch (error) {
+      console.error("No active session found:");
     }
 
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL_CONTROLLER}/sessions/user/${userId}`
-      );
-      setAllSessions(res.data);
-    } catch {
+      const dataSession = await getUserSession(userId);
+      setAllSessions(dataSession);
+      computeDuration(dataSession);
+    } catch (error) {
+      console.error("Failed to fetch all sessions:", error);
       setAllSessions([]);
     }
 
-    // Fetch weekly calories
     try {
       const kcal = await getWeeklyCalories(userId);
       setCalories(kcal);
-    } catch {
+    } catch (error) {
+      console.error("Failed to fetch weekly calories:", error);
       setCalories(0);
     }
+
   };
 
   const computeDuration = (data) => {
-    const totalDuration = data?.workout?.exercises?.reduce((total, ex) => {
+    const totalDuration = data?.map((session) => session.workout?.exercises).flat().reduce((total, ex) => {
       return total + (ex.duration || 0);
     }, 0) ?? 0;
     setMinutes(Math.floor(totalDuration / 60));
     setSeconds(totalDuration % 60);
   };
 
-  const handleSessionUpdate = (updatedSession) => {
+  const handleSessionUpdate = async (updatedSession) => {
     setSession(updatedSession);
     computeDuration(updatedSession);
-    // Refresh all sessions so week tracker updates too
-    fetchAll();
+    await fetchAll();
   };
 
   const handleRunFinish = async () => {
@@ -99,9 +97,10 @@ const Home = () => {
       <NavBar />
 
       <TodayWorkoutCard
-      exercises={exercises}
+        exercises={exercises}
         data={session}
         onSessionUpdate={handleSessionUpdate}
+        onWorkoutSelect={(id) => setSelectedWorkoutId(id)}
       />
 
       <SRAButton
@@ -109,17 +108,17 @@ const Home = () => {
         workoutId={workoutId}
         session={session}
         onSessionUpdate={handleSessionUpdate}
+        workoutId={selectedWorkoutId}
         onLongRun={() => setShowLongRun(true)}
       />
 
       <WeekTracker
-        data={session}
-        allSessions={allSessions}
+        data={allSessions}
         formatDuration={formatDuration}
         calories={calories}
       />
 
-      <RecentActivity data={session} />
+      <RecentActivity data={allSessions} />
 
       {showLongRun && (
         <LongRunScreen

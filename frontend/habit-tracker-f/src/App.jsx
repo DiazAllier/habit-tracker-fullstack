@@ -13,7 +13,7 @@ function App() {
           path="/"
           element={
             // <ProtectedRoute>
-            <div className="overflow-x-auto"> 
+            <div className="overflow-auto"> 
             <Home />
             </div> 
             // </ProtectedRoute>

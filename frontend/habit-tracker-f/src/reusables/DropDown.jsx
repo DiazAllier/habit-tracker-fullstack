@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 
-const DropDown = ({items}) => {
+const DropDown = ({ items, text, onSelect }) => {
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState("Select workout");
+    const [selected, setSelected] = useState("Select an option");
     const ref = useRef();
 
     useEffect(() => {
@@ -38,6 +38,7 @@ const DropDown = ({items}) => {
                                     key={index}
                                     onClick={() => {
                                         setSelected(item.name || item);
+                                        onSelect(item);
                                         setOpen(false);
                                     }}
                                     className="px-4 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors duration-200"
@@ -46,7 +47,7 @@ const DropDown = ({items}) => {
                                 </li>
                             ))
                         ) : (
-                            <li className="px-4 py-3 text-gray-400">No workouts available</li>
+                            <li className="px-4 py-3 text-gray-400">{text}</li>
                         )}
                     </ul>
                 </div>
