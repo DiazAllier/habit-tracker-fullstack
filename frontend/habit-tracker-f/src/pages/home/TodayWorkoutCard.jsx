@@ -35,43 +35,10 @@ const TodayWorkoutCard = ({ data, onSessionUpdate, exercises, onWorkoutSelect })
 
         {data ? (
           <>
-            <p className="text-xl font-bold mb-6 text-left">{data?.workout?.name}</p>
-
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm text-gray-400 font-medium">{data?.workout?.name}</span>
-            </div>
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <span className="whitespace-nowrap text-sm font-medium text-gray-300">
                 <span className="text-white">{<LiveTimer session={data} />}</span>
               </span>
-            </div>
-
-
-
-            <div className="flex flex-col md:flex-row gap-4 items-center">
-              <span className="whitespace-nowrap text-sm font-medium text-gray-300">
-                Progress: <span className="text-white">{data?.progress}%</span>
-              </span>
-
-              <div className="h-3 w-full rounded-full bg-black/40 shadow-inner">
-                <div
-                  className="h-full rounded-full bg-[#5DA331] shadow-[0_0_10px_rgba(93,163,49,0.3)]"
-                  style={{ width: `${data?.progress}%` }}
-                />
-              </div>
-
-              {data?.completed ? (
-                <span className="flex items-center gap-2 rounded-full bg-gray-600 px-6 py-3 text-sm font-bold text-white whitespace-nowrap">
-                  ✅ Done
-                </span>
-              ) : (
-                <button
-                  onClick={handleContinue}
-                  className="flex items-center gap-2 rounded-full bg-[#5DA331] px-6 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:brightness-110 active:scale-95 whitespace-nowrap"
-                >
-                  Continue
-                </button>
-              )}
             </div>
           </>
         ) : (

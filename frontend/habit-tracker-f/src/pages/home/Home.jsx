@@ -4,7 +4,6 @@ import RecentActivity from "./RecentActivity.jsx";
 import SRAButton from "./SRAButton.jsx";
 import TodayWorkoutCard from "./TodayWorkoutCard.jsx";
 import WeekTracker from "./weekTracker/WeekTracker.jsx";
-import LongRunScreen from "./LongRunScreen.jsx";
 import { getUserActiveSession, getUserSession, getWeeklyCalories } from "../../api/sessionWorkoutApi.js";
 import axios from "axios";
 import { getExercises } from "../../api/exerciseApi.js";
@@ -105,7 +104,6 @@ const Home = () => {
 
       <SRAButton
         userId={userId}
-        workoutId={workoutId}
         session={session}
         onSessionUpdate={handleSessionUpdate}
         workoutId={selectedWorkoutId}

@@ -42,8 +42,11 @@ export const updateProgress = async (sessionId, progress) => {
   return res.data;
 };
 
-export const completeWorkout = async (sessionId) => {
-  const res = await API.put(`/${sessionId}/complete`);
+export const completeWorkout = async (sessionId, caloriesBurned) => {
+  const url = caloriesBurned !== undefined
+    ? `/${sessionId}/complete?caloriesBurned=${caloriesBurned}`
+    : `/${sessionId}/complete`;
+  const res = await API.put(url);
   return res.data;
 };
 
