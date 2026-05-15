@@ -8,6 +8,7 @@ import com.diaza.habitracker.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -20,13 +21,14 @@ public class DataSeeder {
             WorkoutServices workoutRepo,
             WorkoutExerciseServices workoutExerciseRepo,
             WorkoutSessionServices workoutSessionServices,
-            UserServices userServices
-    ) {
+            UserServices userServices,
+            BCryptPasswordEncoder passwordEncoder
+            ) {
         return args -> {
 
             if (exerciseRepo.findAll().size() > 0) return;
 
-            User user = userServices.save(new User(null, "allierdiaza@gmail.com", "test123"));
+            User user = userServices.save(new User(null, "test@gmail.com", passwordEncoder.encode("test123")));
 
             Exercise pushUp       = exerciseRepo.save(new Exercise(null, "Push Up",         ExerciseCategory.PUSH));
             Exercise benchPress   = exerciseRepo.save(new Exercise(null, "Bench Press",      ExerciseCategory.PUSH));

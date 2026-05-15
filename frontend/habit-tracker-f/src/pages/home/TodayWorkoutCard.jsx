@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { updateProgress } from "../../api/sessionWorkoutApi";
 import DropDown from "../../reusables/DropDown";
-import LiveTimer from "../../reusables/LiveTimer";
+import LiveTimer from "../../components/LiveTimer";
 const TodayWorkoutCard = ({ data, onSessionUpdate, exercises, onWorkoutSelect }) => {
 
 
@@ -35,8 +35,8 @@ const TodayWorkoutCard = ({ data, onSessionUpdate, exercises, onWorkoutSelect })
 
         {data ? (
           <>
-            <div className="flex flex-col md:flex-row gap-4 items-center">
-              <span className="whitespace-nowrap text-sm font-medium text-gray-300">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
+              <span className="whitespace-nowrap text-sm font-medium text-gray-300 text-center w-full md:w-auto">
                 <span className="text-white">{<LiveTimer session={data} />}</span>
               </span>
             </div>

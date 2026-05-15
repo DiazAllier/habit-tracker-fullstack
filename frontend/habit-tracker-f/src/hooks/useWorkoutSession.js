@@ -7,8 +7,8 @@ export const useWorkoutSession = (userId) => {
 
     useEffect(() => {
         getUserSession(userId)
-            .then(res => {setSession(res.data); console.log(session)})
-            .catch(err => {console.error(err);  console.log(session);});
+            .then(res => { setSession(res.data); console.log(session) })
+            .catch(err => { console.error(err); console.log(session); });
     }, [userId]);
 
     return session;
